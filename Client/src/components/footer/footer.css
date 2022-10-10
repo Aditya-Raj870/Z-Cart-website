@@ -1,7 +1,7 @@
 footer{
     position: relative;
     top: 60px;
-    background-color:#232F3E;
+    background-color:rgb(70, 68, 68);
 }
 
 footer .footer_container{
@@ -30,16 +30,17 @@ footer .footer_container .footr_details_one p{
 
 
 footer .lastdetails{
-    background-color: #131A22;
+    background-color: #0000008f;;
     height:20vh;
 }
 
 footer img{
     display: block;
-    width: 80px;
-    margin: 50px auto auto auto;
+    width: 135px;
+    height: 87px;
+    margin: 40px auto 15px auto;
     text-align: center;
-    padding-top: 30px;
+    /* padding-bottom: 50px; */
 }
 
 footer p{

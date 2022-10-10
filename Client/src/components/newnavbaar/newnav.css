@@ -23,6 +23,11 @@
     font-weight: 500;
     font-size: 13px;
 }
+/* .new_nav right_data img{
+    height: 11px;
+    width: 11px;
+    display: flex;
+} */
 
 /* media query */
 @media (max-width:808px){

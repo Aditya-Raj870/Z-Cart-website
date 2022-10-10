@@ -13,7 +13,7 @@ const Navbar = () => {
       <nav>
         <div className='left'>
           <div className='navlogo'>
-            <NavLink to="/"><img src='./amazon_PNG25.png' /></NavLink>
+            <NavLink to="/"><img src='./zdalogo.png' /></NavLink>
           </div>
           <div className='nav_searchbaar'>
             <input type="text" />

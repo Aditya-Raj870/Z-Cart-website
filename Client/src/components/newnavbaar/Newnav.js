@@ -12,9 +12,9 @@ const Newnav = () => {
                 <p>Fashion</p>
                 <p>Customer Services</p>
                 <p>Electronics</p>
-                <p>Prime</p>
+                <p>Sale</p>
                 <p>Today's deal</p>
-                <p>Amazon Pay</p>
+                <p>Phone Pay</p>
             </div>
             <div className="right_data">
               <img src="./nav.jpg" alt="navata" />
