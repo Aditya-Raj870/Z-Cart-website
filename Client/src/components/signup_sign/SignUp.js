@@ -1,5 +1,8 @@
 import React, { useState } from 'react'
 import {NavLink} from "react-router-dom";
+import {ToastContainer , toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
+
 
 const SignUp = () => {
 
@@ -27,6 +30,60 @@ const SignUp = () => {
         })
     }
 
+    const senddata = async(e)=>{
+        e.preventDefault();
+        const{fname,email,mobile,password,cpassword}=udata;
+
+        if(fname===""){
+            toast.warn(" fname necessary ",{
+                position:"top-center",
+            })
+        }else if(email===""){
+            toast.warn(" email necessary ",{
+                position:"top-center",
+            }) 
+        }else if(mobile===""){
+            toast.warn(" mobile number necessary ",{
+                position:"top-center",
+            }) 
+        }else if(password===""){
+            toast.warn(" password necessary ",{
+                position:"top-center",
+            })
+        }else if (cpassword===""){
+            toast.warn(" cpassword necessary ",{
+                position:"top-center",
+            })
+        }
+
+        const res = await fetch("register",{
+            method:"POST",
+            headers:{
+                "Content-Type" : "application/json"
+            },
+            body: JSON.stringify({
+                fname,email,mobile,password,cpassword
+            })
+        });
+        const data= await res.json();
+        // console.log(data);
+
+
+        if(res.status === 422 || !data){
+            // alert("no data present")
+            toast.warn("invalid details ",{
+                position:"top-center",
+            })
+        }else{
+            // alert("data sucessfully added")
+            toast.success("data sucessfully added ",{
+                position:"top-center",
+            })
+            setUdata({...udata, fname:"",email:"",mobile:"",password:"",cpassword:""});
+        }
+
+    }
+
 
     return (
         <section>
@@ -35,7 +92,7 @@ const SignUp = () => {
                     <img src="./zdalogo.png" alt="amazonlogo" />
                 </div>
                 <div className="sign_form">
-                    <form>
+                    <form method='POST'>
                         <h1>Sign-Up</h1>
                         <div className="form_data">
                             <label htmlFor="fname">Your Name</label>
@@ -78,7 +135,7 @@ const SignUp = () => {
                             value={udata.cpassword}
                              name='cpassword' id='cpassword' />
                         </div>
-                        <button className='signin_btn'>Continue</button>
+                        <button className='signin_btn' onClick={senddata}>Continue</button>
 
                         <div className="signin_info">
                             <p>Already have an account?</p>
@@ -87,6 +144,7 @@ const SignUp = () => {
 
                     </form>
                 </div>
+                <ToastContainer />
             </div>
         </section>
     )

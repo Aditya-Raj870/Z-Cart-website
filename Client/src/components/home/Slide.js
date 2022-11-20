@@ -2,7 +2,8 @@ import React from 'react'
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import { Divider } from "@mui/material";
-import { products } from './productdata';
+import { NavLink } from "react-router-dom";
+// import { products } from './productdata';
 import "./slide.css";
 
 const responsive = {
@@ -23,7 +24,7 @@ const responsive = {
     }
 };
 
-const Slide = ({title}) => {
+const Slide = ({ title, products }) => {
     return (
         <div className='products_section'>
             <div className="products_deal">
@@ -49,16 +50,18 @@ const Slide = ({title}) => {
                 containerClass="carousel-container"
             >
                 {
-                    products.map((e)=>{
-                        return(
-                            <div className="products_items">
-                                <div className="product_img">
-                                    <img src={e.url} alt="productitem" />
-                                    <p className='products_name'>{e.title.shortTitle}</p>
-                                    <p className='products_offer'>{e.discount}</p>
-                                    <p className='products_explore'>{e.tagline}</p>
+                    products.map((e) => {
+                        return (
+                            <NavLink to={`getproductsone/${e.id}`}>
+                                <div className="products_items">
+                                    <div className="product_img">
+                                        <img src={e.url} alt="productitem" />
+                                        <p className='products_name'>{e.title.shortTitle}</p>
+                                        <p className='products_offer'>{e.discount}</p>
+                                        <p className='products_explore'>{e.tagline}</p>
+                                    </div>
                                 </div>
-                            </div>
+                            </NavLink>
                         )
                     })
                 }

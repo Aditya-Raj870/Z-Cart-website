@@ -1,36 +1,107 @@
-import React from 'react'
+import React, {  useContext,useEffect, useState } from 'react'
 import "./cart.css";
-import {Divider} from "@mui/material"
+import { Divider } from "@mui/material"
+import { useNavigate, useParams } from 'react-router-dom';
+import {LoginContext} from "../context/ContextProvider";
 
 const Cart = () => {
+
+    const { id } = useParams("");
+    //    console.log(id);
+
+    const history = useNavigate("");
+
+    const {account, setAccount} = useContext(LoginContext);
+    console.log(account);
+
+    const [inddata, setInddata] = useState([]);
+    console.log(inddata);
+
+    const getinddata = async () => {
+        const res = await fetch(`/getproductsone/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json"
+            }
+        });
+
+        const data = await res.json();
+        // console.log(data);
+
+        if (res.status !== 201) {
+            console.log("no data available");
+        }
+        else {
+            console.log("getdata");
+            setInddata(data);
+        }
+    }
+
+    useEffect(() => {
+        getinddata();
+    }, [id]);
+
+    //add cart function 
+    
+    const addtocart= async(id)=>{
+        const checkres = await fetch(`/addcart/${id}`,{
+            method:"POST",
+            headers:{
+                Accept:"application/json",
+                "Content-Type" : "application/json"
+            },
+            body:JSON.stringify({
+                inddata
+            }),
+            credentials:"include"
+        });
+
+
+        const data1 =  await checkres.json();
+        console.log(data1);
+
+        if(checkres.status === 401 || !data1){
+            console.log("user invalid ")
+            alert("user invalid")
+        }else{
+            // alert("data added into your cart")
+            history("/buynow")
+            setAccount(data1)
+        }
+        
+    }
+
+
+
     return (
         <div className='cart_section'>
-            <div className="cart_container">
-                <div className="left_cart">
-                    <img src="https://rukminim1.flixcart.com/image/150/150/kohigsw0/resistance-tube/c/s/e/new-adjustable-single-resistance-tube-multicolor-na-ajro-deal-original-imag2xg88mhmwxz5.jpeg?q=70" alt="cart_img" />
-                    <div className="cart_btn">
-                        <button className='cart_btn1'>Add to Cart</button>
-                        <button className='cart_btn2'>Buy Now</button>
+            {inddata && Object.keys(inddata).length &&
+                <div className="cart_container">
+                    <div className="left_cart">
+                        <img src={inddata.url} alt="cart_img" />
+                        <div className="cart_btn">
+                            <button className='cart_btn1' onClick={()=>addtocart(inddata.id)}>Add to Cart</button>
+                            <button className='cart_btn2'>Buy Now</button>
+                        </div>
                     </div>
-                </div>
-                <div className="right_cart">
-                    <h3>Fitness Gear</h3>
-                    <h4>AJRO DEAL New Adjustable Single Resistance Tube (Multicolor) Resistance Tube  (Multicolor)
-                    </h4>
-                    <Divider />
-                    <p className='mrp'>M.R.P :Rs-1195</p>
-                    <p>Deal of the day:<span style={{color:"#B12704",fontSize:14}}>Rs:-625.00</span></p>
-                    <p>You save : : <span style={{color:"#B12704",fontSize:14}}>Rs:-570 (47%)</span></p>
-                    
+                    <div className="right_cart">
+                        <h3>{inddata.title.shortTitle}</h3>
+                        <h4>{inddata.title.longTitle}</h4>
+                        <Divider />
+                        <p className='mrp'>M.R.P Rs:-{inddata.price.mrp}</p>
+                        <p>Deal of the day:<span style={{ color: "#B12704", fontSize: 14 }}>Rs:-{inddata.price.cost}.00</span></p>
+                        <p>You save : <span style={{ color: "#B12704", fontSize: 14 }}>Rs:-{inddata.price.mrp - inddata.price.cost}({inddata.price.discount})</span></p>
 
-                    <div className="discount_box">
-                        <h5>Discount : <span style={{color: "#111"}}>Extra 10% off</span></h5>
-                        <h4>Free Delivery:<span style={{color: "#111",fontWeight:600}}>Oct 8-21</span> Details</h4>
-                        <p>Fastest delivery: <span style={{color: "#111",fontSize:14,fontWeight:600}}>Tomorrow 11AM</span></p>
+
+                        <div className="discount_box">
+                            <h5>Discount : <span style={{ color: "#111" }}></span>{inddata.discount}</h5>
+                            <h4>Free Delivery:<span style={{ color: "#111", fontWeight: 600 }}>Oct 8-21</span> Details</h4>
+                            <p>Fastest delivery: <span style={{ color: "#111", fontSize: 14, fontWeight: 600 }}>Tomorrow 11AM</span></p>
+                        </div>
+                        <p className='description'> <span style={{ color: "#565959", fontSize: 16, fontWeight: 500, letterSpacing: "0.4px" }}>{inddata.description}</span></p>
                     </div>
-                    <p className='description'> <span style={{color:"#565959",fontSize:16,fontWeight:500,letterSpacing:"0.4px"}}>This unique product can tone your back muscles, reduce belly fat, improve blood circulation and also improves your body posture. It increases the stamina, energy and vitality of the body. The elastic resistance of the rubber training rope can be used to train and exercise in whichever way you want, according to your physical needs.</span></p>
                 </div>
-            </div>
+            }
         </div>
     )
 }
