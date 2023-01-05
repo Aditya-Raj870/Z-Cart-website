@@ -1,5 +1,7 @@
-import{ React ,  useContext }from 'react'
-import {LoginContext} from '../context/ContextProvider'
+import{ React ,  useContext }from 'react';
+import {LoginContext} from '../context/ContextProvider';
+import {ToastContainer , toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Option = ({deletedata , get}) => {
 
@@ -23,7 +25,10 @@ const Option = ({deletedata , get}) => {
         console.log("error");
       }else{
         console.log("user delete");
-        setAccount(data)
+        toast.success("valid details ",{
+          position:"top-center",
+      })
+        setAccount(data);
         get();
       }
     } catch (error) {
@@ -42,6 +47,7 @@ const Option = ({deletedata , get}) => {
         <p style={{cursor:"pointer"}} onClick={()=>removedata(deletedata)}>Delete</p><span>|</span>
         <p className='forremovemedia'>Save for Later</p><span>|</span>
         <p className='forremovemedia'>See more like this</p>
+        <ToastContainer />
     </div>
   )
 }
